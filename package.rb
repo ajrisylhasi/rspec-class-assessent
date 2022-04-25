@@ -4,10 +4,11 @@ class Package
   @@packages = []
   attr_accessor :name, :contents, :handlings
 
-  def initialize name
+  def initialize name, &blank
     @name = name
     @contents = []
     @handlings = []
+    instance_eval &blank
     @@packages << self
   end
 
@@ -19,10 +20,6 @@ class Package
     @@packages.length
   end
 
-  def self.last
-    @@packages[-1]
-  end
-
   def self.for name
     @@packages.find {|p| p.name == name}
   end
@@ -32,19 +29,18 @@ class Package
   end
 
   def self.package(name, &block)
-    Package.new name
+    Package.new name, &block
+  end
+  
+  def content(text)
+    self.contents << text
+  end
+  
+  def handling(&block)
     instance_eval &block
   end
   
-  def self.content(text)
-    Package.last.contents << text
-  end
-  
-  def self.handling(&block)
-    instance_eval &block
-  end
-  
-  def self.instruction text
-    Package.last.handlings << text
+  def instruction text
+    self.handlings << text
   end
 end
