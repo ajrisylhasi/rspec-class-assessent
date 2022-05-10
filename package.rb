@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Package
-  @@packages = []
   attr_accessor :name, :contents, :handlings
+  @@packages = []
 
   def initialize name, &blank
     @name = name
